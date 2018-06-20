@@ -47,7 +47,7 @@ jobs=2
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
-disable=abstract-method,too-many-arguments,inconsistent-return-statements
+disable=abstract-method,too-many-arguments,inconsistent-return-statements, bad-continuation
 
 
 [REPORTS]
@@ -194,7 +194,7 @@ max-module-lines=1000
 indent-string='    '
 
 # Number of spaces of indent required inside a hanging or continued line.
-# indent-after-paren=4
+indent-after-paren=4
 
 
 [LOGGING]

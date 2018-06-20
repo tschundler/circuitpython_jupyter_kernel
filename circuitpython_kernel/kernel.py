@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Basic functionality of CircuitPython kernel."""
 import ast
+import logging
 import re
 import time
-import logging
 
 from ipykernel.kernelbase import Kernel
 from .board import connect
@@ -15,6 +15,7 @@ KERNEL_LOGGER = logging.getLogger(__name__)
 
 class CircuitPyKernel(Kernel):
     """CircuitPython kernel implementation."""
+
     protocol_version = '4.5.2'
     implementation = 'circuitpython_kernel'
     implementation_version = __version__
@@ -66,13 +67,13 @@ class CircuitPyKernel(Kernel):
             result.extend(self.serial.read_all())
 
         assert result.startswith(b'OK')
-        out, err = result[2:-2].split(b'\x04', 1) # split result
+        out, err = result[2:-2].split(b'\x04', 1)  # split result
 
         return out.decode('utf-8', 'replace'), err.decode('utf-8', 'replace')
 
-
-    def do_execute(self, code, silent, store_history=True,
-                   user_expressions=None, allow_stdin=False):
+    def do_execute(
+        self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
+    ):
         """Execute a user's code cell.
 
         Parameters
@@ -126,14 +127,12 @@ class CircuitPyKernel(Kernel):
         KERNEL_LOGGER.debug('Error %s', err)
         return ast.literal_eval(out)
 
-
     def do_shutdown(self, restart):
         """Handle the kernel shutting down."""
         KERNEL_LOGGER.debug('Shutting down CircuitPython Board Connection..')
         self.serial.write(b'\r\x02')
         KERNEL_LOGGER.debug('closing serial connection..')
         self.serial.close()
-
 
     def do_complete(self, code, cursor_pos):
         """Support code completion."""

@@ -9,12 +9,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    'pyserial',
-    'ipython',
-    'ipykernel',
-    'pylint'
-]
+requirements = ['pyserial', 'ipython', 'ipykernel', 'pylint']
 
 
 test_requirements = [
@@ -30,11 +25,8 @@ setup(
     author="Carol Willing",
     author_email='carolcode@willingconsulting.com',
     url='https://github.com/adafruit/circuitpython_kernel',
-    packages=[
-        'circuitpython_kernel',
-    ],
-    package_dir={'circuitpython_kernel':
-                 'circuitpython_kernel'},
+    packages=['circuitpython_kernel'],
+    package_dir={'circuitpython_kernel': 'circuitpython_kernel'},
     entry_points={},
     include_package_data=True,
     install_requires=requirements,
@@ -49,5 +41,5 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     test_suite='tests',
-    tests_require=test_requirements
+    tests_require=test_requirements,
 )
