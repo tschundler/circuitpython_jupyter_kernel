@@ -50,8 +50,8 @@ Designed for CircuitPython (SAMD21 and SAMD51)
 -  `Adafruit ItsyBitsy M4 Express <https://www.adafruit.com/product/3800>`__
 
 
-Other Boards
-~~~~~~~~~~~~
+Other Adafruit Boards
+~~~~~~~~~~~~~~~~~~~~~
 
 -  `Adafruit Feather HUZZAH ESP8266 <https://www.adafruit.com/products/2821>`__
 
@@ -66,7 +66,7 @@ Official .zip files are available through the
 Documentation
 -------------
 
-This kernel is fully documented on the Adafruit Learning System (*Guide Coming Soon!*)
+This kernel is fully documented on the Adafruit Learning System Guide: `CircuitPython with Jupyter Notebooks <https://learn.adafruit.com/circuitpython-with-jupyter-notebooks/overview?preview_token=v7Eay4tLlhN50xPJiQFSow>`__.
 
 There's also documentation for this kernel listed on
 `ReadTheDocs <https://circuitpython-kernel.readthedocs.io/en/latest/>`__.
