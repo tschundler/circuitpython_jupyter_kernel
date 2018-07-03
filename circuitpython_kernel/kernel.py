@@ -38,7 +38,6 @@ class CircuitPyKernel(Kernel):
     def __init__(self, **kwargs):
         """Set up connection to board"""
         super().__init__(**kwargs)
-        KERNEL_LOGGER.debug('Opening CircuitPython board connection..')
         self.serial = connect()
 
     def run_code(self, code):

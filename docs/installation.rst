@@ -47,7 +47,7 @@ Navigate into the cloned repository directory. Install this kernel into Jupyter 
 
 .. code:: shell
 
- $ pip3 install circuitpython_kernel
+ $ python3 setup.py install
 
 Then, run
 

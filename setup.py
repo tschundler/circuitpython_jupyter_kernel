@@ -19,7 +19,7 @@ test_requirements = [
 
 setup(
     name='circuitpython_kernel',
-    version='0.3.0',
+    version='0.3.1',
     description="CircuitPython Kernel enables CircuitPython to be used in Jupyter Notebooks for learning Python coding with microcontrollers.",
     long_description=readme + '\n\n' + history,
     author="Carol Willing",
