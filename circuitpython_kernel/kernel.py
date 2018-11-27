@@ -5,8 +5,8 @@ import logging
 import re
 import time
 
-from serial.serialutil import SerialException
 from ipykernel.kernelbase import Kernel
+from serial.serialutil import SerialException
 from .board import Board, BoardError
 from .version import __version__
 
@@ -49,10 +49,10 @@ class CircuitPyKernel(Kernel):
             self.board.softreset()
         elif line.startswith("%upload_delay"):
             try:
-                s = line.split(' ')
-                self.upload_delay = float(s[1])
-                KERNEL_LOGGER.debug(f"upload_delay set to {float(s[1])} s")
-            except:
+                s_line = line.split(' ')
+                self.upload_delay = float(s_line[1])
+                KERNEL_LOGGER.debug(f"upload_delay set to {float(s_line[1])} s")
+            except TypeError:
                 pass
         else:
             return False
@@ -132,14 +132,16 @@ class CircuitPyKernel(Kernel):
         out = err = None
         try:
             out, err = self.run_code(code)
-        except (BoardError, SerialException) as e:
-            KERNEL_LOGGER.debug(f'no connection {e}')
-            err = f"No connection to CiruitPython VM: {e}"
+        except (BoardError, SerialException) as ser_eror:
+            KERNEL_LOGGER.debug(f'no connection {ser_eror}')
+            err = f"No connection to CiruitPython VM: {ser_eror}"
         except KeyboardInterrupt:
             KERNEL_LOGGER.debug(f'keyboard interrupt')
             err = "Keyboard Interrupt"
-        if out: KERNEL_LOGGER.debug(f"Output: '{out}'")
-        if err: KERNEL_LOGGER.debug(f"Error:  '{err}'")
+        if out:
+            KERNEL_LOGGER.debug(f"Output: '{out}'")
+        if err:
+            KERNEL_LOGGER.debug(f"Error:  '{err}'")
         if not silent:
             out_content = {'name': 'stdout', 'text': out}
             err_content = {'name': 'stderr', 'text': err}
@@ -163,8 +165,8 @@ class CircuitPyKernel(Kernel):
         """
         try:
             out, err = self.run_code('print({})'.format(expr))
-        except (BoardError, SerialException) as e:
-            out = err = f"Lost connection to CiruitPython VM: {e}"
+        except (BoardError, SerialException) as ser_eror:
+            out = err = f"Lost connection to CiruitPython VM: {ser_eror}"
         KERNEL_LOGGER.debug('Output: %s', out)
         KERNEL_LOGGER.debug('Error %s', err)
         return ast.literal_eval(out)
