@@ -5,8 +5,9 @@ import logging
 import re
 import time
 
+from serial.serialutil import SerialException
 from ipykernel.kernelbase import Kernel
-from .board import connect
+from .board import Board, BoardError
 from .version import __version__
 
 # Create global KERNEL_LOGGER for debug messages.
@@ -38,7 +39,24 @@ class CircuitPyKernel(Kernel):
     def __init__(self, **kwargs):
         """Set up connection to board"""
         super().__init__(**kwargs)
-        self.serial = connect()
+        KERNEL_LOGGER.debug(f"circuitpython_kernel version {__version__}")
+        self.board = Board()
+        self.upload_delay = 0.06
+
+    def is_magic(self, line):
+        """Returns true if line was handled"""
+        if line.startswith("%softreset"):
+            self.board.softreset()
+        elif line.startswith("%upload_delay"):
+            try:
+                s = line.split(' ')
+                self.upload_delay = float(s[1])
+                KERNEL_LOGGER.debug(f"upload_delay set to {float(s[1])} s")
+            except:
+                pass
+        else:
+            return False
+        return True
 
     def run_code(self, code):
         """Run a code snippet.
@@ -56,23 +74,31 @@ class CircuitPyKernel(Kernel):
             Decoded bytearray error from code run.
 
         """
-        # Send code to board
-        self.serial.write(code.encode('utf-8') + b'\x04')  # code and Control-D
-
+        # make sure we are connected to the board
+        self.board.connect()
+        # Send code to board & fetch results (if any) after each line sent
+        for line in code.splitlines(False):
+            if not self.is_magic(line):
+                self.board.write(line.encode('utf-8'))
+                self.board.write(b'\r\n')
+                # The Featherboard M4 cannot keep up with long code cells
+                time.sleep(self.upload_delay)
+        # Kick off evaluation ...
+        self.board.write(b'\r\x04')   # Control-D
         # Set up a bytearray to hold the result from the code run
         result = bytearray()
         while not result.endswith(b'\x04>'):  # Control-D
             time.sleep(0.1)
-            result.extend(self.serial.read_all())
+            result.extend(self.board.read_all())
+        KERNEL_LOGGER.debug('received: %s', result.decode('utf-8', 'replace'))
 
         assert result.startswith(b'OK')
         out, err = result[2:-2].split(b'\x04', 1)  # split result
 
         return out.decode('utf-8', 'replace'), err.decode('utf-8', 'replace')
 
-    def do_execute(
-        self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
-    ):
+    def do_execute(self, code, silent, store_history=True,
+                                  user_expressions=None, allow_stdin=False):
         """Execute a user's code cell.
 
         Parameters
@@ -97,9 +123,23 @@ class CircuitPyKernel(Kernel):
             Execution results.
 
         """
-        out, err = self.run_code(code)
-        KERNEL_LOGGER.debug('Output: %s', out)
-        KERNEL_LOGGER.debug("Error %s", err)
+        if not code.strip():
+            return {'status': 'ok',
+                'execution_count': self.execution_count,
+                'payload': [],
+                'user_expressions': {}}
+        # evaluate code on board
+        out = err = None
+        try:
+            out, err = self.run_code(code)
+        except (BoardError, SerialException) as e:
+            KERNEL_LOGGER.debug(f'no connection {e}')
+            err = f"No connection to CiruitPython VM: {e}"
+        except KeyboardInterrupt:
+            KERNEL_LOGGER.debug(f'keyboard interrupt')
+            err = "Keyboard Interrupt"
+        if out: KERNEL_LOGGER.debug(f"Output: '{out}'")
+        if err: KERNEL_LOGGER.debug(f"Error:  '{err}'")
         if not silent:
             out_content = {'name': 'stdout', 'text': out}
             err_content = {'name': 'stderr', 'text': err}
@@ -121,7 +161,10 @@ class CircuitPyKernel(Kernel):
         Use ast's literal_eval to prevent strange input from execution.
 
         """
-        out, err = self.run_code('print({})'.format(expr))
+        try:
+            out, err = self.run_code('print({})'.format(expr))
+        except (BoardError, SerialException) as e:
+            out = err = f"Lost connection to CiruitPython VM: {e}"
         KERNEL_LOGGER.debug('Output: %s', out)
         KERNEL_LOGGER.debug('Error %s', err)
         return ast.literal_eval(out)
@@ -129,9 +172,9 @@ class CircuitPyKernel(Kernel):
     def do_shutdown(self, restart):
         """Handle the kernel shutting down."""
         KERNEL_LOGGER.debug('Shutting down CircuitPython Board Connection..')
-        self.serial.write(b'\r\x02')
-        KERNEL_LOGGER.debug('closing serial connection..')
-        self.serial.close()
+        self.board.write(b'\r\x02')
+        KERNEL_LOGGER.debug('closing board connection..')
+        self.board.close()
 
     def do_complete(self, code, cursor_pos):
         """Support code completion."""

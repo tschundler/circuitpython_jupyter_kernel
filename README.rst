@@ -63,10 +63,41 @@ Official .zip files are available through the
 `latest GitHub releases <https://github.com/adafruit/circuitpython_kernel/releases>`__.
 
 
+Install
+-------
+
+Jupyter::
+
+    pip3 install --upgrade pip
+    pip3 install jupyter
+
+Optional::
+
+    pip3 install jupyterlab
+
+CircuitPython kernel::
+
+    cd circuitpython_kernel/
+    python3 setup.py install; python3 -m circuitpython_kernel.install
+
+Then run with one of::
+
+    jupyter notebook
+    jupyter lab
+
+and choose the CircuitPython kernel.
+
 Documentation
 -------------
 
-This kernel is fully documented on the Adafruit Learning System Guide: `CircuitPython with Jupyter Notebooks <https://learn.adafruit.com/circuitpython-with-jupyter-notebooks/overview?preview_token=v7Eay4tLlhN50xPJiQFSow>`__.
+This kernel is fully documented on the Adafruit Learning System Guide:
+`CircuitPython with Jupyter Notebooks <https://learn.adafruit.com/circuitpython-with-jupyter-notebooks/overview?preview_token=v7Eay4tLlhN50xPJiQFSow>`__.
+
+A line containing exactly the word::
+
+    %softreset
+
+will reset the board and release all resources.
 
 There's also documentation for this kernel listed on
 `ReadTheDocs <https://circuitpython-kernel.readthedocs.io/en/latest/>`__.
