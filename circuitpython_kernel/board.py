@@ -113,7 +113,7 @@ class Board:
         """
         if self.connected:
             return
-        # pylint : disable = too-many-function-args
+        # pylint : disable=too-many-function-args
         device = self._find_board()
         try:
             BOARD_LOGGER.debug(f'connect: open {device}')
@@ -127,7 +127,7 @@ class Board:
                 self.serial.open()
                 BOARD_LOGGER.debug('* board opened')
             except SerialException as serial_error:
-                raise BoardError(f"failed to open {device}")
+                raise BoardError(f"failed to open {device}, {serial_error}")
         else:
             BOARD_LOGGER.debug('serial already open')
 
@@ -139,12 +139,13 @@ class Board:
             raise BoardError(f"failed to enter raw repl with {device}")
 
 
-    def _find_board():
+    def _find_board(self):
         """Find serial port where an Adafruit board is connected"""
         for port in comports():
             # print out each device
             BOARD_LOGGER.debug(port.device)
             if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID:
                 BOARD_LOGGER.debug(f"CircuitPython Board Found at: {port.device}")
+                BOARD_LOGGER.debug(f"Connected? {self.connected}")
                 return port.device
         raise BoardError("found no board")
