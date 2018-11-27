@@ -27,7 +27,7 @@ Status
 ------
 
 This project's status is experimental. It has been tested with CircuitPython (SAMD) boards and the
-Feather HUZZAH (ESP8266) using CircuitPython 2.x Stable and 3.0.0 Beta 1.
+Feather HUZZAH (ESP8266) with CircuitPython 3.x.
 
 It may break, and if it does, please file an
 `issue on this repository <https://circuitpython-kernel.readthedocs.io/en/latest/contributing.html>`__.
