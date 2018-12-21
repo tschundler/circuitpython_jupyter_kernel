@@ -58,7 +58,8 @@ class CircuitPyKernel(Kernel):
             return False
         return True
 
-    def is_comment(self, line):
+    @classmethod
+    def is_comment(cls, line):
         """Returns true if the line of code is empty or a comment.
 
             It is much faster to check and skip these lines on the host then
