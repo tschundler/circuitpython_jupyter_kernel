@@ -58,6 +58,16 @@ class CircuitPyKernel(Kernel):
             return False
         return True
 
+    @classmethod
+    def is_comment(cls, line):
+        """Returns true if the line of code is empty or a comment.
+
+            It is much faster to check and skip these lines on the host then
+            to send them to the MCU (with an `upload_delay` between each one).
+        """
+        line = line.strip()
+        return len(line) == 0 or line.startswith("#")
+
     def run_code(self, code):
         """Run a code snippet.
 
@@ -78,7 +88,7 @@ class CircuitPyKernel(Kernel):
         self.board.connect()
         # Send code to board & fetch results (if any) after each line sent
         for line in code.splitlines(False):
-            if not self.is_magic(line):
+            if not self.is_magic(line) and not self.is_comment(line):
                 self.board.write(line.encode('utf-8'))
                 self.board.write(b'\r\n')
                 # The Featherboard M4 cannot keep up with long code cells
@@ -174,7 +184,12 @@ class CircuitPyKernel(Kernel):
     def do_shutdown(self, restart):
         """Handle the kernel shutting down."""
         KERNEL_LOGGER.debug('Shutting down CircuitPython Board Connection..')
+
+        # If we try to disconnect before sending any commands, the `write()`
+        # call here will fail. So, make sure we are connected to the board.
+        self.board.connect()
         self.board.write(b'\r\x02')
+
         KERNEL_LOGGER.debug('closing board connection..')
         self.board.close()
 
