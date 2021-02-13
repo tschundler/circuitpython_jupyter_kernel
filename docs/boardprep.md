@@ -4,7 +4,7 @@
 Before you start using the CircuitPython_Kernel, you'll need a board running CircuitPython. If you're not sure if
 the board plugged into your computer is running CircuitPython, check your file explorer for a drive named `CIRCUITPY`
 
-## Designed for CircuitPython (SAMD21 and SAMD51)
+## Designed for CircuitPython (SAMD21, SAMD51 and RP2040)
 
 ### Boards Supported:
 
@@ -17,6 +17,8 @@ the board plugged into your computer is running CircuitPython, check your file e
 
  - [Metro M4 ]( https://www.adafruit.com/product/3382)
  - [ItsyBitsy M4](https://www.adafruit.com/product/3727)
+
+ - [Raspberry Pi Pico RP2040](https://www.adafruit.com/product/4864)
 
 
 ### Installing CircuitPython Firmware
