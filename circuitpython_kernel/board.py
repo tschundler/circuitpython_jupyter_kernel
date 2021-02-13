@@ -12,6 +12,7 @@ BOARD_LOGGER = logging.getLogger(__name__)
 # Vendor IDs
 ADAFRUIT_VID = 0x239A # SAMD
 ESP8266_VID = 0x10C4 # Huzzah ESP8266
+PICO_VID = 0x239A # PICO PI
 
 # repl commands
 CHAR_CTRL_A = b'\x01'
@@ -144,7 +145,7 @@ class Board:
         for port in comports():
             # print out each device
             BOARD_LOGGER.debug(port.device)
-            if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID:
+            if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID or port.vid == PICO_VID:
                 BOARD_LOGGER.debug(f"CircuitPython Board Found at: {port.device}")
                 BOARD_LOGGER.debug(f"Connected? {self.connected}")
                 return port.device
