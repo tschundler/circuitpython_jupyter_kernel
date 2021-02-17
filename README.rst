@@ -26,8 +26,9 @@ running `CircuitPython <https://github.com/adafruit/circuitpython>`_ from within
 Status
 ------
 
-This project's status is experimental. It has been tested with CircuitPython (SAMD) boards and the
-Feather HUZZAH (ESP8266) with CircuitPython 3.x.
+This project's status is experimental. It has been tested with CircuitPython 3.x in (SAMD) boards and
+Feather HUZZAH (ESP8266).
+With CircuitPython 6.x in Raspberry Pi Pico
 
 It may break, and if it does, please file an
 `issue on this repository <https://circuitpython-kernel.readthedocs.io/en/latest/contributing.html>`__.
@@ -54,6 +55,10 @@ Other Adafruit Boards
 ~~~~~~~~~~~~~~~~~~~~~
 
 -  `Adafruit Feather HUZZAH ESP8266 <https://www.adafruit.com/products/2821>`__
+
+Other Boards
+~~~~~~~~~~~~~~~~~~~~~
+-  `Raspberry Pi Pico <https://www.adafruit.com/products/4864>`__
 
 
 Download
