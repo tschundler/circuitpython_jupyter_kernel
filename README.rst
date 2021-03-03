@@ -51,6 +51,7 @@ Designed for CircuitPython (SAMD21 and SAMD51)
 -  `Adafruit ItsyBitsy M4 Express <https://www.adafruit.com/product/3800>`__
 
 
+
 Other Adafruit Boards
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -59,7 +60,7 @@ Other Adafruit Boards
 Other Boards
 ~~~~~~~~~~~~~~~~~~~~~
 -  `Raspberry Pi Pico <https://www.adafruit.com/products/4864>`__
-
+-  `PJRC Teensy 4.1 <https://www.adafruit.com/products/4622> __
 
 Download
 --------
