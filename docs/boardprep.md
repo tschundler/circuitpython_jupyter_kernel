@@ -4,7 +4,7 @@
 Before you start using the CircuitPython_Kernel, you'll need a board running CircuitPython. If you're not sure if
 the board plugged into your computer is running CircuitPython, check your file explorer for a drive named `CIRCUITPY`
 
-## Designed for CircuitPython (SAMD21, SAMD51 and RP2040)
+## Designed for CircuitPython (SAMD21, SAMD51 and RP2040, NXP iMXRT1062)
 
 ### Boards Supported:
 
@@ -19,7 +19,7 @@ the board plugged into your computer is running CircuitPython, check your file e
  - [ItsyBitsy M4](https://www.adafruit.com/product/3727)
 
  - [Raspberry Pi Pico RP2040](https://www.adafruit.com/product/4864)
-
+ - [PJRC Teensy 4.1](https://www.adafruit.com/product/4622)
 
 ### Installing CircuitPython Firmware
 
@@ -49,6 +49,18 @@ Use `screen` program:
 
     screen <device> 115200
 
+## PJRC Teensy 4.1
+
+The Teensy line of microcontrollers have a different installation to the standard circuitpython installation, requiring a program called Teensy Loader and a hex file.
+
+### Installing CircuitPython Firmware
+
+- Download the Teensy Loader Application: https://www.pjrc.com/teensy/loader.html
+- Install the loader following the guide for your specific operating system.
+- Download the [CircuitPython Firmware (.hex file) from the CircuitPython Website](https://circuitpython.org/board/teensy41/)
+- Once the Teensy Loader is downloaded, press the onboard push button on the Teensy, this places the teensy in the halfkay bootlader mode.
+- Open the Teensy Loader Application and select the left most button and upload the downloaded .hex file.
+- Unplug and plug the Teensy back in and you are ready to go.
 
 ## ampy
 

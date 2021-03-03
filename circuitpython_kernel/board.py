@@ -13,6 +13,7 @@ BOARD_LOGGER = logging.getLogger(__name__)
 ADAFRUIT_VID = 0x239A # SAMD
 ESP8266_VID = 0x10C4 # Huzzah ESP8266
 PICO_VID = 0x239A # PICO PI
+TENNSY_VID = 0x16c0 #PJRC Teensy 4.1
 
 # repl commands
 CHAR_CTRL_A = b'\x01'
@@ -145,7 +146,7 @@ class Board:
         for port in comports():
             # print out each device
             BOARD_LOGGER.debug(port.device)
-            if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID or port.vid == PICO_VID:
+            if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID or port.vid == PICO_VID or port.vid == TEENSY_VID:
                 BOARD_LOGGER.debug(f"CircuitPython Board Found at: {port.device}")
                 BOARD_LOGGER.debug(f"Connected? {self.connected}")
                 return port.device
