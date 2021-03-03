@@ -13,7 +13,7 @@ BOARD_LOGGER = logging.getLogger(__name__)
 ADAFRUIT_VID = 0x239A # SAMD
 ESP8266_VID = 0x10C4 # Huzzah ESP8266
 PICO_VID = 0x239A # PICO PI
-TENNSY_VID = 0x16c0 #PJRC Teensy 4.1
+TEENSY_VID = 0x16c0 #PJRC Teensy 4.1
 
 # repl commands
 CHAR_CTRL_A = b'\x01'
