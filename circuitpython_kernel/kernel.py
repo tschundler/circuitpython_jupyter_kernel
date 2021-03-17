@@ -54,9 +54,48 @@ class CircuitPyKernel(Kernel):
                 KERNEL_LOGGER.debug(f"upload_delay set to {float(s_line[1])} s")
             except TypeError:
                 pass
+        elif line.startswith("%python"):
+            #python line magic, runs what ever is on the line following the %python magic.
+            code = line.lstrip("%python")
+            code = code.lstrip(' ')
+            for item in code.split(";"):
+                item = item.lstrip(' ') #remove leading white space
+                try:
+                    print(eval(item))   #does not print
+                except:
+                    out = exec(item)
+                    if out != None:
+                        print(out)      #does not print
+            
         else:
             return False
         return True
+
+    def is_cell_magic(self, code):
+        """Cell magic to run python code.
+        -----
+        Cell shall begin with %%python followed by a new line
+        Will iteratively run each line of code.
+        """
+
+        if code.startswith("%%python"):
+            code = code.lstrip("%%python")
+            code = code.lstrip(' ')
+            data = code.splitlines(True)
+            for item in data:
+                
+                code = code.lstrip(' ')    #this removes all preceeding white space, 
+                                           #i need to figure out how to get for loops, etc working
+                try:
+                    print(eval(item))      #does not print
+                except:
+                    out = exec(item)
+
+                    if out != None:
+                        print(out)         #does not print
+            return True
+        else:
+            return False
 
     @classmethod
     def is_comment(cls, line):
@@ -86,6 +125,13 @@ class CircuitPyKernel(Kernel):
         """
         # make sure we are connected to the board
         self.board.connect()
+        ##cell check for python cell magics
+        python_cell = self.is_cell_magic(code)
+    
+        if python_cell == True:
+            out = []
+            err = []
+            return out, err
         # Send code to board & fetch results (if any) after each line sent
         for line in code.splitlines(False):
             if not self.is_magic(line) and not self.is_comment(line):
