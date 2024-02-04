@@ -14,10 +14,10 @@ ENTER_REPL_TIMEOUT = 5.0
 REBOOT_WAIT = 0.5
 
 # Vendor IDs
-ADAFRUIT_VID = 0x239A # SAMD
-ESP8266_VID = 0x10C4 # Huzzah ESP8266
-PICO_VID = 0x239A # PICO PI
-TEENSY_VID = 0x16C0 #PJRC Teensy 4.1
+ADAFRUIT_VID = 0x239A  # SAMD
+ESP8266_VID = 0x10C4  # Huzzah ESP8266
+PICO_VID = 0x239A  # PICO PI
+TEENSY_VID = 0x16C0  # PJRC Teensy 4.1
 
 # repl commands
 CHAR_CTRL_A = b'\x01'
@@ -33,6 +33,7 @@ MSG_RAWREPL_PROMPT = MSG_NEWLINE + MSG_RAWREPL_BARE_PROMPT
 MSG_SOFT_REBOOT = b'soft reboot\r\n'
 MSG_RELOAD = b'Use CTRL-D to reload.'
 MSG_AUTORELOAD = b'Auto-reload is on.'
+
 
 class BoardError(Exception):
     """Errors relating to board connections"""
@@ -56,7 +57,6 @@ class Board:
         except SerialException as serial_error:
             self.connected = False
             raise BoardError(f"cannot write to board: {serial_error}")
-
 
     def read_until(self, msg):
         """Reads board until end of `msg`.
@@ -106,7 +106,6 @@ class Board:
         """Resets the circuitpython board (^D)
         from a jupyter cell.
         """
-        serial = self.serial
         # in case the VM is in a weird state ...
         self.enter_raw_repl()
         # now do the soft reset ...
@@ -127,7 +126,8 @@ class Board:
         self.write(CHAR_CTRL_C)
         self.write(CHAR_CTRL_A)
         BOARD_LOGGER.debug('* waiting for prompt ...')
-        # just waiting for the ">" prompt, but sometimes there may be other text before it, which includes a ">", so read_until isn't correct.
+        # just waiting for the ">" prompt, but sometimes there may be other
+        # text before it, which includes a ">", so read_until isn't correct.
         start = time.monotonic()
         while True:
             msg = self.read_all()
@@ -155,8 +155,8 @@ class Board:
         try:
             BOARD_LOGGER.debug(f'connect: open {device}')
             self.serial = Serial(device, 115200, parity='N')
-        except:
-            raise BoardError(f"failed to access {device}")
+        except Exception as e:
+            raise BoardError(f"failed to access {device}: {e}")
         # open the port
         if not self.serial.is_open:
             try:
@@ -172,17 +172,18 @@ class Board:
         try:
             self.enter_raw_repl()
             self.connected = True
-        except:
-            raise BoardError(f"failed to enter raw repl with {device}")
-
+        except Exception as e:
+            raise BoardError(f"failed to enter raw repl with {device}: {e}")
 
     def _find_board(self):
         """Find serial port where an Adafruit board is connected"""
         for port in comports():
             # print out each device
             BOARD_LOGGER.debug(port.device)
-            if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID or port.vid == PICO_VID or port.vid == TEENSY_VID:
-                BOARD_LOGGER.debug(f"CircuitPython Board Found at: {port.device}")
+            if port.vid == ADAFRUIT_VID or port.vid == ESP8266_VID or \
+                    port.vid == PICO_VID or port.vid == TEENSY_VID:
+                BOARD_LOGGER.debug(
+                    f"CircuitPython Board Found at: {port.device}")
                 BOARD_LOGGER.debug(f"Connected? {self.connected}")
                 return port.device
         raise BoardError("found no board")
